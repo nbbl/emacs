@@ -66,6 +66,8 @@ SCOPE is the scope of the search, such as 'project or 'subdirs."
 		       "c")
 		      ((eq texttype 'regexp)
 		       "g")
+		      ((eq texttype 'symbol)
+		       "s")
 		      (t "r"))))
     (cedet-gnu-global-call (list (concat flgs scopeflgs stflag)
 				 searchtext))))

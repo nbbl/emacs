@@ -99,15 +99,30 @@ is supported.
 
 If no tools are supported, then 'grep is assumed.")
 
+;; (defun semantic-symref-calculate-rootdir ()
+;;   "Calculate the root directory for a symref search.
+;; Start with and EDE project, or use the default directory."
+;;   (let* ((rootproj (when (and (featurep 'ede) ede-minor-mode)
+;; 		     (ede-toplevel)))
+;; 	 (rootdirbase (if rootproj
+;; 			  (ede-project-root-directory rootproj)
+;; 			default-directory)))
+;;     (if (and rootproj (condition-case nil
+;; 			  ;; Hack for subprojects.
+;; 			  (oref rootproj :metasubproject)
+;; 			(error nil)))
+;; 	(ede-up-directory rootdirbase)
+;;       rootdirbase)))
+
 (defun semantic-symref-calculate-rootdir ()
   "Calculate the root directory for a symref search.
 Start with and EDE project, or use the default directory."
   (let* ((rootproj (when (and (featurep 'ede) ede-minor-mode)
 		     (ede-toplevel)))
-	 (rootdirbase (if rootproj
-			  (ede-project-root-directory rootproj)
-			default-directory)))
-    (if (and rootproj (condition-case nil
+	 (rootdirbase (cond (rootproj (ede-project-root-directory rootproj))
+			    ((cedet-gnu-global-root) (cedet-gnu-global-root))
+			    (t default-directory))))
+	 (if (and rootproj (condition-case nil
 			  ;; Hack for subprojects.
 			  (oref rootproj :metasubproject)
 			(error nil)))

@@ -174,17 +174,23 @@ return nil."
       ;; Return the results
       (nreverse hits))))
 
+;; (defun cedet-gnu-global-create/update-database (&optional dir)
+;;   "Create a GNU Global database in DIR.
+;; If a database already exists, then just update it."
+;;   (interactive "DDirectory: ")
+;;   (let ((root (cedet-gnu-global-root dir)))
+;;     (if root (setq dir root))
+;;     (let ((default-directory dir))
+;;       (cedet-gnu-global-gtags-call
+;;        (when root
+;; 	 '("-i");; Incremental update flag.
+;; 	 )))))
+
 (defun cedet-gnu-global-create/update-database (&optional dir)
-  "Create a GNU Global database in DIR.
-If a database already exists, then just update it."
-  (interactive "DDirectory: ")
-  (let ((root (cedet-gnu-global-root dir)))
-    (if root (setq dir root))
-    (let ((default-directory dir))
-      (cedet-gnu-global-gtags-call
-       (when root
-	 '("-i");; Incremental update flag.
-	 )))))
+  "Update the GNU Global database if we are under it."
+  (let ((default-directory (cedet-gnu-global-root dir)))
+    (when default-directory
+      (cedet-gnu-global-gtags-call '("-i"))))); Incremental update flag.
 
 (provide 'cedet-global)
 
